@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NoteShare - Student Notes Repository</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<!-- Ambient background orbs -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<div class="app">
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar glass" id="sidebar">
+        <div class="brand">
+            <svg class="brand-logo" viewBox="0 0 32 32" fill="none">
+                <path d="M6 5l14-3 6 4v20l-14 4-6-4V5z" fill="url(#lg)"/>
+                <path d="M6 5l6 4v20l-6-4V5z" fill="#4f46e5" opacity=".55"/>
+                <defs>
+                    <linearGradient id="lg" x1="6" y1="2" x2="26" y2="30">
+                        <stop stop-color="#8b85ff"/><stop offset="1" stop-color="#5b52f0"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span class="brand-name">Note<span>Share</span></span>
+        </div>
+
+        <nav class="nav">
+            <button class="nav-item active" data-view="dashboard">
+                <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1v-9z"/></svg>
+                <span>Dashboard</span>
+            </button>
+            <button class="nav-item" data-view="students">
+                <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17.5" cy="9" r="2.5"/><path d="M17 14.2c2.6.2 4.5 2 4.5 5.3"/></svg>
+                <span>Students</span>
+            </button>
+            <button class="nav-item" data-view="subjects">
+                <svg viewBox="0 0 24 24"><path d="M12 6c-2-1.5-5-2-9-2v14c4 0 7 .5 9 2 2-1.5 5-2 9-2V4c-4 0-7 .5-9 2zM12 6v14"/></svg>
+                <span>Subjects</span>
+            </button>
+            <button class="nav-item" data-view="notes">
+                <svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>
+                <span>Notes</span>
+            </button>
+            <button class="nav-item" data-view="ratings">
+                <svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3z"/></svg>
+                <span>Ratings</span>
+            </button>
+        </nav>
+
+        <div class="api-status" id="apiStatus">
+            <span class="dot"></span><span id="apiStatusText">Connecting...</span>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN ================= -->
+    <main class="main">
+        <!-- Top bar -->
+        <header class="topbar glass">
+            <button class="menu-btn" id="menuBtn" aria-label="Menu">
+                <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            </button>
+            <div class="search inset">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                <input type="text" id="globalSearch" placeholder="Search notes, subjects, or students..." autocomplete="off" />
+            </div>
+            <button class="btn btn-primary" id="topAddBtn">
+                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                <span id="topAddLabel">Add Note</span>
+            </button>
+            <div class="avatar" title="NoteShare">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>
+            </div>
+        </header>
+
+        <!-- ============ DASHBOARD VIEW ============ -->
+        <section class="view active" id="view-dashboard">
+            <div class="stats-row">
+                <div class="stat glass" data-goto="students">
+                    <div class="stat-icon indigo"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17.5" cy="9" r="2.5"/><path d="M17 14.2c2.6.2 4.5 2 4.5 5.3"/></svg></div>
+                    <div class="stat-body">
+                        <div class="stat-value" id="statStudents">0</div>
+                        <div class="stat-label">Students</div>
+                        <div class="stat-trend" id="trendStudents">-</div>
+                    </div>
+                </div>
+                <div class="stat glass" data-goto="subjects">
+                    <div class="stat-icon teal"><svg viewBox="0 0 24 24"><path d="M12 6c-2-1.5-5-2-9-2v14c4 0 7 .5 9 2 2-1.5 5-2 9-2V4c-4 0-7 .5-9 2zM12 6v14"/></svg></div>
+                    <div class="stat-body">
+                        <div class="stat-value" id="statSubjects">0</div>
+                        <div class="stat-label">Subjects</div>
+                        <div class="stat-trend" id="trendSubjects">-</div>
+                    </div>
+                </div>
+                <div class="stat glass" data-goto="notes">
+                    <div class="stat-icon indigo"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></div>
+                    <div class="stat-body">
+                        <div class="stat-value" id="statNotes">0</div>
+                        <div class="stat-label">Notes</div>
+                        <div class="stat-trend" id="trendNotes">-</div>
+                    </div>
+                </div>
+                <div class="stat glass" data-goto="ratings">
+                    <div class="stat-icon teal"><svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3z"/></svg></div>
+                    <div class="stat-body">
+                        <div class="stat-value" id="statRatings">0</div>
+                        <div class="stat-label">Ratings</div>
+                        <div class="stat-trend" id="trendRatings">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bento">
+                <div class="tile glass tile-recent">
+                    <div class="tile-head">
+                        <h3>Recent Notes</h3>
+                        <a class="link" data-goto="notes">View All <span>&rarr;</span></a>
+                    </div>
+                    <div id="recentNotes" class="stack"></div>
+                </div>
+
+                <div class="tile-col">
+                    <div class="tile glass">
+                        <div class="tile-head"><h3>Rating Distribution</h3></div>
+                        <div id="ratingDist" class="dist"></div>
+                    </div>
+                    <div class="tile glass">
+                        <div class="tile-head">
+                            <h3>Top Rated Notes</h3>
+                            <a class="link" data-goto="notes">View All <span>&rarr;</span></a>
+                        </div>
+                        <div id="topRated" class="toplist"></div>
+                    </div>
+                </div>
+
+                <div class="tile glass tile-quick">
+                    <div class="tile-head"><h3>Quick Add</h3></div>
+                    <div class="quick-grid">
+                        <button class="quick raised" data-quick="note">
+                            <span class="q-ico indigo"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8l-5-5z"/><path d="M14 3v5h5"/></svg></span>Add Note
+                        </button>
+                        <button class="quick raised" data-quick="student">
+                            <span class="q-ico teal"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/></svg></span>Add Student
+                        </button>
+                        <button class="quick raised" data-quick="subject">
+                            <span class="q-ico indigo"><svg viewBox="0 0 24 24"><path d="M12 6c-2-1.5-5-2-9-2v14c4 0 7 .5 9 2 2-1.5 5-2 9-2V4c-4 0-7 .5-9 2zM12 6v14"/></svg></span>Add Subject
+                        </button>
+                        <button class="quick raised" data-quick="rating">
+                            <span class="q-ico teal"><svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3z"/></svg></span>Rate Note
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ STUDENTS VIEW ============ -->
+        <section class="view" id="view-students">
+            <div class="page-head">
+                <div><h2>Students</h2><p>Manage registered students and administrators.</p></div>
+                <button class="btn btn-primary" data-quick="student"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add Student</button>
+            </div>
+            <div class="toolbar glass">
+                <div class="search inset">
+                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                    <input type="text" id="searchStudents" placeholder="Search by name or email..." autocomplete="off" />
+                </div>
+                <span class="count-pill" id="countStudents">0 students</span>
+            </div>
+            <div class="glass table-wrap">
+                <table class="table">
+                    <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th class="right">Actions</th></tr></thead>
+                    <tbody id="studentsBody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ============ SUBJECTS VIEW ============ -->
+        <section class="view" id="view-subjects">
+            <div class="page-head">
+                <div><h2>Subjects</h2><p>Academic subjects organised by department and semester.</p></div>
+                <button class="btn btn-primary" data-quick="subject"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add Subject</button>
+            </div>
+            <div class="toolbar glass">
+                <div class="search inset">
+                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                    <input type="text" id="searchSubjects" placeholder="Search by name or code..." autocomplete="off" />
+                </div>
+                <span class="count-pill" id="countSubjects">0 subjects</span>
+            </div>
+            <div class="card-grid" id="subjectsGrid"></div>
+        </section>
+
+        <!-- ============ NOTES VIEW ============ -->
+        <section class="view" id="view-notes">
+            <div class="page-head">
+                <div><h2>Notes</h2><p>Browse, search and share study material.</p></div>
+                <button class="btn btn-primary" data-quick="note"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add Note</button>
+            </div>
+            <div class="toolbar glass">
+                <div class="search inset">
+                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                    <input type="text" id="searchNotes" placeholder="Search by title or description..." autocomplete="off" />
+                </div>
+                <span class="count-pill" id="countNotes">0 notes</span>
+            </div>
+            <div class="card-grid" id="notesGrid"></div>
+        </section>
+
+        <!-- ============ RATINGS VIEW ============ -->
+        <section class="view" id="view-ratings">
+            <div class="page-head">
+                <div><h2>Ratings</h2><p>Feedback shared by students on notes.</p></div>
+                <button class="btn btn-primary" data-quick="rating"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add Rating</button>
+            </div>
+            <div class="toolbar glass">
+                <div class="search inset">
+                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                    <input type="text" id="searchRatings" placeholder="Search rating comments..." autocomplete="off" />
+                </div>
+                <span class="count-pill" id="countRatings">0 ratings</span>
+            </div>
+            <div class="card-grid" id="ratingsGrid"></div>
+        </section>
+    </main>
+</div>
+
+<!-- ================= MODAL ================= -->
+<div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal glass" role="dialog" aria-modal="true">
+        <div class="modal-head">
+            <h3 id="modalTitle">Title</h3>
+            <button class="icon-btn" id="modalClose" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        </div>
+        <form id="modalForm" novalidate>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-foot">
+                <button type="button" class="btn btn-ghost" id="modalCancel">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="modalSubmit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ================= CONFIRM ================= -->
+<div class="modal-backdrop" id="confirmBackdrop">
+    <div class="modal glass confirm">
+        <div class="confirm-ico"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6"/></svg></div>
+        <h3>Delete this item?</h3>
+        <p id="confirmText">This action cannot be undone.</p>
+        <div class="modal-foot center">
+            <button class="btn btn-ghost" id="confirmNo">Cancel</button>
+            <button class="btn btn-danger" id="confirmYes">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toasts -->
+<div class="toasts" id="toasts"></div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
