@@ -1,4 +1,4 @@
-package com.example.Noteshare;
+package com.example.noteshare;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
